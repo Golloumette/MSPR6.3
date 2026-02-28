@@ -4,81 +4,65 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 import models, schemas
 
+# utilitaires génériques
+
+def get_all(db: Session, model):
+    return db.query(model).all()
+
+
+def create_item(db: Session, model, schema):
+    db_obj = model(**schema.dict())
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
+
 # ----- Continent -----
 def get_continents(db: Session):
-    return db.query(models.Continent).all()
+    return get_all(db, models.Continent)
 
 def create_continent(db: Session, continent: schemas.ContinentCreate):
-    db_continent = models.Continent(**continent.dict())
-    db.add(db_continent)
-    db.commit()
-    db.refresh(db_continent)
-    return db_continent
+    return create_item(db, models.Continent, continent)
 
 # ----- Pays -----
 def get_pays(db: Session):
-    return db.query(models.Pays).all()
+    return get_all(db, models.Pays)
 
 def create_pays(db: Session, pays: schemas.PaysCreate):
-    db_pays = models.Pays(**pays.dict())
-    db.add(db_pays)
-    db.commit()
-    db.refresh(db_pays)
-    return db_pays
+    return create_item(db, models.Pays, pays)
 
 # ----- Famille -----
 def get_familles(db: Session):
-    return db.query(models.Famille).all()
+    return get_all(db, models.Famille)
 
 def create_famille(db: Session, famille: schemas.FamilleCreate):
-    db_famille = models.Famille(**famille.dict())
-    db.add(db_famille)
-    db.commit()
-    db.refresh(db_famille)
-    return db_famille
+    return create_item(db, models.Famille, famille)
 
 # ----- Virus -----
 def get_virus(db: Session):
-    return db.query(models.Virus).all()
+    return get_all(db, models.Virus)
 
 def create_virus(db: Session, virus: schemas.VirusCreate):
-    db_virus = models.Virus(**virus.dict())
-    db.add(db_virus)
-    db.commit()
-    db.refresh(db_virus)
-    return db_virus
+    return create_item(db, models.Virus, virus)
 
 # ----- LoggingInsert -----
 def get_logs(db: Session):
-    return db.query(models.LoggingInsert).all()
+    return get_all(db, models.LoggingInsert)
 
 def create_log(db: Session, log: schemas.LoggingInsertCreate):
-    db_log = models.LoggingInsert(**log.dict())
-    db.add(db_log)
-    db.commit()
-    db.refresh(db_log)
-    return db_log
+    return create_item(db, models.LoggingInsert, log)
 
 # ----- Pandemie -----
 def get_pandemies(db: Session):
-    return db.query(models.Pandemie).all()
+    return get_all(db, models.Pandemie)
 
 def create_pandemie(db: Session, pandemie: schemas.PandemieCreate):
-    db_pandemie = models.Pandemie(**pandemie.dict())
-    db.add(db_pandemie)
-    db.commit()
-    db.refresh(db_pandemie)
-    return db_pandemie
+    return create_item(db, models.Pandemie, pandemie)
 
 # ----- SuiviPandemie -----
 
-
 def create_suivi(db: Session, suivi: schemas.SuiviPandemieCreate):
-    db_suivi = models.SuiviPandemie(**suivi.dict())
-    db.add(db_suivi)
-    db.commit()
-    db.refresh(db_suivi)
-    return db_suivi
+    return create_item(db, models.SuiviPandemie, suivi)
 
 def get_last_suivi_by_pays(db: Session):
     

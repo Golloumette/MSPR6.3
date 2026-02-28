@@ -1,14 +1,14 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 import crud, schemas
-from database import get_db
+from .utils import add_crud_routes
 
 router = APIRouter(prefix="/logs", tags=["logs"])
 
-@router.get("/", response_model=list[schemas.LoggingInsert])
-def read_logs(db: Session = Depends(get_db)):
-    return crud.get_logs(db)
-
-@router.post("/", response_model=schemas.LoggingInsert)
-def create_log(log: schemas.LoggingInsertCreate, db: Session = Depends(get_db)):
-    return crud.create_log(db, log)
+add_crud_routes(
+    router,
+    tags=["logs"],
+    get_schema=schemas.LoggingInsert,
+    create_schema=schemas.LoggingInsert,
+    get_fn=crud.get_logs,
+    create_fn=crud.create_log,
+)

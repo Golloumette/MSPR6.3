@@ -1,14 +1,14 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 import crud, schemas
-from database import get_db
+from .utils import add_crud_routes
 
 router = APIRouter(prefix="/pays", tags=["pays"])
 
-@router.get("/", response_model=list[schemas.Pays])
-def read_pays(db: Session = Depends(get_db)):
-    return crud.get_pays(db)
-
-@router.post("/", response_model=schemas.Pays)
-def create_pays(pays: schemas.PaysCreate, db: Session = Depends(get_db)):
-    return crud.create_pays(db, pays)
+add_crud_routes(
+    router,
+    tags=["pays"],
+    get_schema=schemas.Pays,
+    create_schema=schemas.Pays,
+    get_fn=crud.get_pays,
+    create_fn=crud.create_pays,
+)

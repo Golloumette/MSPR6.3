@@ -1,21 +1,16 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 import crud, schemas
-from database import get_db
-from .security import get_current_user, admin_required
+from .utils import add_crud_routes
 
 router = APIRouter(prefix="/continents", tags=["continents"])
 
-@router.get("/", response_model=list[schemas.Continent])
-def read_continents(db: Session = Depends(get_db)):
-    return crud.get_continents(db)
-
-
-
-@router.post("/", response_model=schemas.Continent)
-def create_continent(
-    continent: schemas.ContinentCreate,
-    db: Session = Depends(get_db),
-    user=Depends(admin_required)  
-):
-    return crud.create_continent(db, continent)
+# simple CRUD routes with admin restriction on POST
+add_crud_routes(
+    router,
+    tags=["continents"],
+    get_schema=schemas.Continent,
+    create_schema=schemas.Continent,
+    get_fn=crud.get_continents,
+    create_fn=crud.create_continent,
+    admin=True,
+)

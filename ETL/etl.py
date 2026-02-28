@@ -6,16 +6,9 @@ import os
 import logging
 
 # Configuration du système de logs
-def setup_logging():
-    log_dir = "log"
-    os.makedirs(log_dir, exist_ok=True)  # Crée le dossier `log` s'il n'existe pas
-    log_file = os.path.join(log_dir, "etl.log")
-    
-    logging.basicConfig(
-        filename=log_file,
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s"
-    )
+# utilise la fonction commune
+from ETL.common import setup_logging
+
 
 # Extraction du contenu d'une extension JSON
 def extract_json(file_path):

@@ -1,14 +1,14 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 import crud, schemas
-from database import get_db
+from .utils import add_crud_routes
 
 router = APIRouter(prefix="/pandemies", tags=["pandemies"])
 
-@router.get("/", response_model=list[schemas.Pandemie])
-def read_pandemies(db: Session = Depends(get_db)):
-    return crud.get_pandemies(db)
-
-@router.post("/", response_model=schemas.Pandemie)
-def create_pandemie(pandemie: schemas.PandemieCreate, db: Session = Depends(get_db)):
-    return crud.create_pandemie(db, pandemie)
+add_crud_routes(
+    router,
+    tags=["pandemies"],
+    get_schema=schemas.Pandemie,
+    create_schema=schemas.Pandemie,
+    get_fn=crud.get_pandemies,
+    create_fn=crud.create_pandemie,
+)
