@@ -95,7 +95,7 @@ def main():
     split_idx = int(0.9*n)
     X_train, X_test = X[:split_idx], X[split_idx:]
     y_train, y_test = y[:split_idx], y[split_idx:]
-    dates_test = df_feats.index[split_idx:]
+   
 
     # CV time-series
     tscv = TimeSeriesSplit(n_splits=5)

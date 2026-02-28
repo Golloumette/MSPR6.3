@@ -5,12 +5,16 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from passlib.hash import bcrypt
 from jose import jwt, JWTError
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from database import get_db
 from models import User
 import schemas
+import os
+from dotenv import load_dotenv
 
-SECRET_KEY = "un_secret_a_definir"  # à remplacer par une vraie clé secrète !
+# load secret from environment for safety
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY", "change_me")  # override in prod
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -26,7 +30,9 @@ def authenticate_user(db: Session, username: str, password: str):
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+    # use timezone-aware UTC to avoid naive datetime warnings
+    now = datetime.now(timezone.utc)
+    expire = now + (expires_delta or timedelta(minutes=15))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
