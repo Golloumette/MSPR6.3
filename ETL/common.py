@@ -102,8 +102,9 @@ def recup_pays_bdd(conn=None) -> dict:
         cursor = conn.cursor()
         cursor.execute("SELECT nom, id FROM pays")
         rows = cursor.fetchall()
-        mapping = {nom: id_ for nom, id_ in rows}
-        logging.info(f"Mapping pays chargé : {mapping}")
+        # reuse dict constructor for clearer intent
+        mapping = dict(rows)
+        logging.info("Mapping pays chargé : %s", mapping)
     except Exception as e:
         logging.error(f"Erreur lors du chargement des pays : {e}")
     finally:

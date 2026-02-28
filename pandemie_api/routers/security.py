@@ -5,7 +5,13 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 
 
-SECRET_KEY = "un_secret_a_definir"  # Remplace par une clé secrète solide
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# secret key used for JWT encoding/decoding; should be set via environment
+SECRET_KEY = os.getenv("SECRET_KEY", "change_me_in_prod")
 ALGORITHM = "HS256"
 
 # Ce schéma permet de récupérer le token "Bearer ..." dans l'en-tête Authorization

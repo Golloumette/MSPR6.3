@@ -372,8 +372,11 @@ if __name__ == "__main__":
 
     # 2) Récupérer le nom du pays depuis la table `pays`
     engine = get_engine()
-    query = f"SELECT nom FROM pays WHERE id = {cid}"
-    df_pays = pd.read_sql(query, con=engine)
+    df_pays = pd.read_sql(
+        "SELECT nom FROM pays WHERE id = %s",
+        con=engine,
+        params=(cid,)
+    )
     if df_pays.empty:
         nom_pays = "<inconnu>"
     else:
