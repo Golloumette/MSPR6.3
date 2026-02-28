@@ -142,7 +142,7 @@ def get_last_suivi_by_continent(db: Session, pandemie_nom: str = None):
         pandemie_nom_val = pandemie_noms.get(suivi.id_pandemie, "Inconnue")
         key = (continent_nom, pandemie_nom_val)
         if key not in result:
-            result[key] = {champ: 0 for champ in champs}
+            result[key] = dict.fromkeys(champs, 0)
         for champ in champs:
             val = getattr(suivi, champ, 0)
             if val is None:
@@ -211,7 +211,7 @@ def get_last_suivi_by_virus(db: Session):
         virus_id = pandemie_virus.get(suivi.id_pandemie)
         virus_nom = virus_noms.get(virus_id, "Inconnu")
         if virus_nom not in result:
-            result[virus_nom] = {champ: 0 for champ in champs}
+            result[virus_nom] = dict.fromkeys(champs, 0)
         for champ in champs:
             val = getattr(suivi, champ, 0)
             if val is None:
